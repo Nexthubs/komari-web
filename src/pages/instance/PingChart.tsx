@@ -669,5 +669,6 @@ const PingChart = ({ uuid }: { uuid: string }) => {
     </Flex>
   );
 };
+console.log("PingChart avaliableView", avaliableView, "max", max_record_preserve_time);
 
 export default PingChart;
