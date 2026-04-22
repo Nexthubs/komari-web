@@ -66,6 +66,7 @@ const PingChart = ({ uuid }: { uuid: string }) => {
     { label: t("chart.days", { count: 30 }), hours: 720 },
   ];
   const avaliableView: { label: string; hours?: number }[] = [];
+  console.log("PingChart avaliableView", avaliableView, "max", max_record_preserve_time);
   if (
     typeof max_record_preserve_time === "number" &&
     max_record_preserve_time > 0
@@ -669,6 +670,5 @@ const PingChart = ({ uuid }: { uuid: string }) => {
     </Flex>
   );
 };
-console.log("PingChart avaliableView", avaliableView, "max", max_record_preserve_time);
 
 export default PingChart;
