@@ -62,6 +62,8 @@ const PingChart = ({ uuid }: { uuid: string }) => {
     { label: t("chart.hours", { count: 6 }), hours: 6 },
     { label: t("chart.hours", { count: 12 }), hours: 12 },
     { label: t("chart.days", { count: 1 }), hours: 24 },
+    { label: t("chart.days", { count: 7 }), hours: 168 },
+    { label: t("chart.days", { count: 30 }), hours: 720 },
   ];
   const avaliableView: { label: string; hours?: number }[] = [];
   if (
@@ -239,10 +241,26 @@ const PingChart = ({ uuid }: { uuid: string }) => {
     // 数据驱动：每条线使用“中位采样间隔 * 倍数（默认6）”作为最大插值跨度，并钳制在 [2min, 30min]。
     if (tasks.length > 0 && full.length > 0) {
       const keys = tasks.map((t) => String(t.id));
+      const interpolationOptions =
+        hours >= 720
+          ? {
+              maxGapMultiplier: 8,
+              minCapMs: 30 * 60_000,
+              maxCapMs: 24 * 60 * 60_000,
+            }
+          : hours >= 168
+          ? {
+              maxGapMultiplier: 8,
+              minCapMs: 10 * 60_000,
+              maxCapMs: 6 * 60 * 60_000,
+            }
+          : {
+              maxGapMultiplier: 6,
+              minCapMs: 2 * 60_000,
+              maxCapMs: 30 * 60_000,
+            };
       full = interpolateNullsLinear(full, keys, {
-        maxGapMultiplier: 6,
-        minCapMs: 2 * 60_000,
-        maxCapMs: 30 * 60_000,
+        ...interpolationOptions,
       });
     }
     return full;
